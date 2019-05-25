@@ -37,9 +37,9 @@
 
 #include <ceres/ceres.h>
 #include <ceres/rotation.h>
-#include "theia/sfm/feature.h"
 #include "theia/sfm/camera/camera.h"
 #include "theia/sfm/camera/pinhole_camera_model.h"
+#include "theia/sfm/feature.h"
 
 namespace theia {
 
@@ -49,16 +49,15 @@ struct ReprojectionError {
   explicit ReprojectionError(const Feature& feature) : feature_(feature) {}
 
   template <typename T>
-  bool operator()(const T* extrinsic_parameters,
-                  const T* intrinsic_parameters,
-                  const T* point,
-                  T* reprojection_error) const {
+  bool operator()(const T* extrinsic_parameters, const T* intrinsic_parameters,
+                  const T* point, T* reprojection_error) const {
     typedef Eigen::Matrix<T, 3, 1> Matrix3T;
     typedef Eigen::Map<const Matrix3T> ConstMap3T;
 
     static const T kVerySmallNumber(1e-8);
 
     // Remove the translation.
+    // TODO: Check. Why multiplication by point[3].
     Eigen::Matrix<T, 3, 1> adjusted_point =
         ConstMap3T(point) -
         point[3] * ConstMap3T(extrinsic_parameters + Camera::POSITION);
@@ -79,13 +78,11 @@ struct ReprojectionError {
     // Rotate the point to obtain the point in the camera coordinate system.
     T rotated_point[3];
     ceres::AngleAxisRotatePoint(extrinsic_parameters + Camera::ORIENTATION,
-                                adjusted_point.data(),
-                                rotated_point);
+                                adjusted_point.data(), rotated_point);
 
     // Apply the camera intrinsics to get the reprojected pixel.
     T reprojection[2];
-    CameraModel::CameraToPixelCoordinates(intrinsic_parameters,
-                                          rotated_point,
+    CameraModel::CameraToPixelCoordinates(intrinsic_parameters, rotated_point,
                                           reprojection);
 
     // Compute the reprojection error.

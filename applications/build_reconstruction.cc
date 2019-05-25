@@ -36,6 +36,7 @@
 #include <glog/logging.h>
 #include <theia/theia.h>
 #include <time.h>
+#include <algorithm>
 #include <chrono>  // NOLINT
 #include <string>
 #include <vector>
@@ -389,6 +390,7 @@ void AddImagesToReconstructionBuilder(
   if (image_files.size() > FLAGS_max_num_images) {
     image_files.resize(FLAGS_max_num_images);
   }
+  std::sort(image_files.begin(), image_files.end());
 
   // Load calibration file if it is provided.
   std::unordered_map<std::string, theia::CameraIntrinsicsPrior>
@@ -405,6 +407,16 @@ void AddImagesToReconstructionBuilder(
   theia::CameraIntrinsicsGroupId intrinsics_group_id =
       theia::kInvalidCameraIntrinsicsGroupId;
   if (FLAGS_shared_calibration) {
+    // If calibration is supposed to be shared, set same intrinsic prior.
+    if (camera_intrinsics_prior.size() > 0) {
+      theia::CameraIntrinsicsPrior rep_prior =
+          camera_intrinsics_prior.cbegin()->second;
+      for (const auto& path : image_files) {
+        std::string file_name;
+        theia::GetFilenameFromFilepath(path, true, &file_name);
+        camera_intrinsics_prior[file_name] = rep_prior;
+      }
+    }
     intrinsics_group_id = 0;
   }
 
