@@ -1,7 +1,8 @@
 #!/bin/bash
 
 ROOT_3RD=~/workspace/3rdParty
-CMAKE_BUILD_TYPE=Debug
+#CMAKE_BUILD_TYPE=Debug
+CMAKE_BUILD_TYPE=Release
 ROCKSDB_HOME=${ROOT_3RD}/rock_sdb/install/
 
 cd ..

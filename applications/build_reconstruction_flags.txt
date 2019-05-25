@@ -2,7 +2,7 @@
 # Input/output files.
 # Set these if a matches file is not present. Images should be a filepath with a
 # wildcard e.g., /home/my_username/my_images/*.jpg
---images=
+--images=/home/koichi/workspace/3rdParty/SfM_quality_evaluation/Benchmarking_Camera_Calibration_2008/fountain-P11/test_images/*.jpg
 --output_matches_file=
 
 # If a matches file has already been created, set the filepath here. This avoids
@@ -12,12 +12,13 @@
 # The calibration file indicates possibly known calibration e.g, from EXIF or
 # explicit calibration. Theia attempts to extract EXIF focal lengths if calibration
 # is not supplied for a given image.
---calibration_file=
---output_reconstruction=
+--calibration_file=/home/koichi/workspace/3rdParty/SfM_quality_evaluation/Benchmarking_Camera_Calibration_2008/fountain-P11/test_images/calib.json
+--output_reconstruction=/home/koichi/workspace/3rdParty/SfM_quality_evaluation/Benchmarking_Camera_Calibration_2008/fountain-P11/test_images/test
 
 ############### Multithreading ###############
 # Set to the number of threads you want to use.
---num_threads=16
+# Original 16
+--num_threads=1
 
 ############### Feature Extraction ###############
 --descriptor=SIFT
@@ -39,6 +40,7 @@
 # higher this number the more memory is required.
 --matching_max_num_images_in_cache=128
 
+# Orignal : CASCADE_HASHING
 --matching_strategy=CASCADE_HASHING
 --lowes_ratio=0.75
 --min_num_inliers_for_valid_match=30
@@ -52,20 +54,23 @@
 # Global descriptor extractor settings. The global image descriptors are used to
 # speed up matching by selected the K most similar images for each image, and
 # only performing feature matching with these images.
+# Original : true
+--select_image_pairs_with_global_image_descriptor_matching=true
 --num_nearest_neighbors_for_global_descriptor_matching=100
 --num_gmm_clusters_for_fisher_vector=16
 --max_num_features_for_fisher_vector_training=1000000
 
 ############### General SfM Options ###############
 --reconstruction_estimator=GLOBAL
---min_track_length=2
+--min_track_length=3
 --max_track_length=50
 --reconstruct_largest_connected_component=false
 
 # Set to true if all views were captured with the same camera. If true, then a
 # single set of camera intrinsic parameters will be used for all views in the
 # reconstruction.
---shared_calibration=false
+# Original : false
+--shared_calibration=true
 
 # If set to true, only views with known calibration are reconstructed.
 --only_calibrated_views=false

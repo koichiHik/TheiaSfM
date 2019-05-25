@@ -156,6 +156,7 @@ class FeatureExtractorAndMatcher {
   // compact representation for each image and select a subset of kNN images to
   // perform explicit (and expensive) feature matching.
   std::unique_ptr<GlobalDescriptorExtractor> global_image_descriptor_extractor_;
+  std::mutex global_image_descriptor_extractor_mutex_;
 
   // Feature matcher and mutex for thread-safe access.
   std::unique_ptr<FeatureMatcher> matcher_;
