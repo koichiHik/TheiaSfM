@@ -2,8 +2,8 @@
 import subprocess
 
 IMAGE_DIRECTORY = \
-    "/home/koichi/Okinawa_Pic/Kokusai_Dori_20190525/"
-IMAGE_EXTENSION = "*.JPG"
+    "/home/koichi/Desktop/pictures/SfM_quality_evaluation/Benchmarking_Camera_Calibration_2008/fountain-P5_test/images/"
+IMAGE_EXTENSION = "*.jpg"
 
 CAMERA_CALIB_FILE = "calib.json"
 
